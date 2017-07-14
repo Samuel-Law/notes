@@ -1,0 +1,128 @@
+# Git与SVN的比较
+	git和SVN还是挺像的，都有提交，合并等操作，看来这是源码管理工具的基本操作。
+
+	1. Git是分布式的，SVN是集中式的，好处是跟其他同事不会有太多的冲突，自己写的代码放在自己电脑上，一段时间后再提交、合并，也可以不用联网在本地提交；
+
+	2. Git下载下来后，在本地不必联网就可以看到所有的log，很方便学习，SVN却需要联网；
+
+	3. Git鼓励分Branch，而SVN，说实话，我用Branch的次数还挺少的，SVN自带的Branch merge我还真没用过，有merge时用的是Beyond Compare工具合并后再Commit的；
+
+	4. Tortoise也有出Git版本，真是好东西；
+
+	5. SVN在Commit前，我们都建议是先Update一下，跟本地的代码编译没问题，并确保开发的功能正常后再提交，这样其实挺麻烦的，有好几次同事没有先Updata，就
+	Commit了，发生了一些错误，耽误了大家时间，Git可能这种情况会少些。
+
+# GIT
+	安装
+		下载好安装包，安装成功后，在开始菜单里面找到 “Git –> Git Bash”
+		在命令行输入如下： 
+			$ git config --global user.name "xxxxxxx"
+			$ git config --global user.email "879083421@qq.com"
+	
+		因为Git是分布式版本控制系统，所以需要填写用户名和邮箱作为一个标识。 
+		
+		注意：git config  –global 参数，有了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然你也可以对某个仓库指定的不同的用户名和邮箱。 
+	操作
+		 一：创建版本库。
+
+	     版本库又名仓库，英文名repository,你可以简单的理解一个目录，这个目录里面的所有文件都可以被Git管理起来，每个文件的修改，删除，Git都能跟踪，以便任何时刻都可以追踪历史，或者在将来某个时刻还可以将文件”还原”。
+
+	    所以创建一个版本库也非常简单，如下我是D盘 –> www下 目录下新建一个testgit版本库。 
+
+	    	$ cd D
+	    	$ cd www
+	    	$ mkdir testgit
+	    	$ cd testgit
+	    	$ pwd
+	    (pwd命令是用于显示当前的目录)
+
+	   	1.  通过命令 git init 把这个目录变成git可以管理的仓库
+	   			$ git init
+	   		这时候你当前testgit目录下会多了一个.git的目录，这个目录是Git来跟踪管理版本的，没事千万不要手动乱改这个目录里面的文件，否则，会把git仓库给破坏了。
+
+	   	2.把文件添加到版本库中。 
+	   		首先要明确下，所有的版本控制系统，只能跟踪文本文件的改动，比如txt文件，网页，所有程序的代码等，Git也不列外，版本控制系统可以告诉你每次的改 动，但是图片，视频这些二进制文件，虽能也能由版本控制系统管理，但没法跟踪文件的变化，只能把二进制文件每次改动串起来，也就是知道图片从1kb变成 2kb，但是到底改了啥，版本控制也不知道。 
+
+	   	操作演示
+
+	   		先testgit目录下新建一个记事本文件 readme.txt 内容如下：11111111 
+
+	   		提交文件：分两步
+
+		   		第一步：使用命令 git add readme.txt添加到暂存区里面去。如下： 
+
+		   			$ git add readme.txt
+
+		   		第二步：用命令 git commit告诉Git，把文件提交到仓库。 
+
+		   			$ git commit -m "readme.txt提交"
+
+	   		通过命令git status来查看是否还有文件未提交，如下： 
+
+	   			$ git status
+
+	   		添加一行2222222222内容，继续使用git status来查看下结果，
+	   		命令会诉我们 readme.txt文件已被修改，但是未被提交的修改。 
+
+	   		使用git diff命令查看更改的内容
+
+	   			$ git diff readme.txt
+
+	   		提交修改,跟提交文件的操作是一样的
+
+	   			$ git add readme.txt
+	   			$ git status  //提交之前先查看一下状态
+	   			$ git commit -m "文件增加22222内容"
+	   			$ git status  //提交之后再查看一下状态
+
+	   	版本回退
+
+	   		使用 git log 命令可以查看历史记录
+	   			$ git log
+	   		嫌信息显示太多，可以选择简化版
+	   			$ git log -pretty=oneline
+
+	   		回退操作：两种
+
+	   			(1) git reset  –hard HEAD^ 
+	   			那么如果要回退到上上个版本只需把HEAD^ 改成 HEAD^^ 以此类推。
+	   			那如果要回退到前100个版本的话，使用上面的方法肯定不方便，我们可以使用下面的简便命令操作：git reset  –hard HEAD~100 即可。
+	   				$ git reset  –hard HEAD^
+	   			使用 cat readme.txt命令可以查看文件内容
+	   				$ cat readme.txt
+	   			可以看到，内容已经回退到上一个版本了。我们可以继续使用git log 来查看下历史记录信息，
+
+	   			(2) $ git reset -hard XXXXXX
+	   			若想恢复或者直接跳到某版本
+	   			使用 git reflog命令获取历史版本号
+	   				$ git reflog
+	   			使用 git reset  –hard 版本号  恢复该版本
+	   				$ git reset -hard XXXXXX
+
+	理解
+		工作区：
+			就是你在电脑上看到的目录，比如目录下testgit里的文件(.git隐藏目录版本库除外)。或者以后需要再新建的目录文件等等都属于工作区范畴。 
+		版本库(Repository)：
+			工作区有一个隐藏目录.git,这个不属于工作区，这是版本库。其中版本库里面存了很多东西，其中最重要的就是stage(暂存区)，还有Git为我们自动创建了第一个分支master,以及指向master的一个指针HEAD。 
+
+	ssh密钥
+		首先配置全局name和email
+			$ git config --global user.name "xxxx"  
+  
+			$ git config --global user.email "xxxx@xx.com" 
+
+		进入.ssh文件夹 (若不存在，可以手动创建一个)
+			$ mkdir  ~/.ssh  
+
+		生成key
+			$ ssh-keygen -t rsa -C "xxxx@xx.com"  
+
+		 连续按三次回车，这里设置的密码就为空了，并且创建了key。
+
+		 最后得到了两个文件：id_rsa和id_rsa.pub
+
+		 打开Admin目录进入.ssh文件夹，用记事本打开id_rsa.pub，复制里面的内容即可。
+
+
+
+

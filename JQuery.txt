@@ -1,0 +1,416 @@
+jQuery 语法
+	基础语法： $(selector).action()
+	如：
+		$(this).hide() - 隐藏当前元素
+
+	    $("p").hide() - 隐藏所有 <p> 元素
+
+	    $("p.test").hide() - 隐藏所有 class="test" 的 <p> 元素
+
+	    $("#test").hide() - 隐藏所有 id="test" 的元素
+
+jQuery  选择器
+	jQuery 选择器允许您对 HTML 元素组或单个元素进行操作。
+
+	jQuery 中所有选择器都以美元符号开头：$()。
+
+	元素选择器
+
+		$("p") 
+
+	#id 选择器
+
+		$("#test")
+
+	.class 选择器
+
+		$(".test")
+
+jQuery 事件 
+
+	页面对不同访问者的响应叫做事件。
+	事件处理程序指的是当 HTML 中发生某些事件时所调用的方法。
+
+	jQuery 事件方法语法
+
+		$("p").click();
+	
+	常用的 jQuery 事件方法
+
+		$(document).ready()
+
+			$(document).ready() 方法允许我们在文档完全加载完后执行函数。
+
+jQuery 效果
+	
+	隐藏与显示   hide() 和 show()
+
+		语法:
+
+		$(selector).hide(speed,callback);
+
+		$(selector).show(speed,callback);
+
+			可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
+
+			可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
+
+		下面的例子演示了带有 speed 参数的 hide() 方法：
+		
+			$("button").click(function(){
+			  $("p").hide(1000);
+			});
+
+		jQuery toggle()
+
+		使用 toggle() 方法来切换 hide() 和 show() 方法。显示被隐藏的元素，并隐藏已显示的元素：
+
+			$("button").click(function(){
+			  $("p").toggle();
+			});
+
+	淡入淡出  fadeIn()  fadeOut()  fadeToggle() fadeTo()
+
+		语法:
+		
+			$(selector).fadeIn(speed,callback);
+
+			可选的 speed 参数规定效果的时长。它可以取以下值："slow"、"fast" 或毫秒。.
+
+		fadeTo() 方法
+
+			fadeTo() 方法允许渐变为给定的不透明度（值介于 0 与 1 之间）。
+
+		语法:
+
+			$(selector).fadeTo(speed,opacity,callback);
+
+			必需的 speed 参数规定效果的时长。它可以取以下值："slow"、"fast" 或毫秒。
+
+			fadeTo() 方法中必需的 opacity 参数将淡入淡出效果设置为给定的不透明度（值介于 0 与 1 之间）。
+
+	滑动  slideDown()  slideUp()  slideToggle()
+
+		语法:
+    
+			$(selector).slideDown(speed,callback);
+
+			可选的 speed 参数规定效果的时长。它可以取以下值："slow"、"fast" 或毫秒。
+
+			可选的 callback 参数是滑动完成后所执行的函数名称。
+
+	动画  animate() 
+
+		语法：
+
+			$(selector).animate({params},speed,callback);
+
+				必需的 params 参数定义形成动画的 CSS 属性。
+
+				可选的 speed 参数规定效果的时长。它可以取以下值："slow"、"fast" 或毫秒。
+
+				可选的 callback 参数是动画完成后所执行的函数名称。
+
+	停止动画  stop()
+
+		 stop() 方法用于在动画或效果完成前对它们进行停止。
+
+		 语法:
+
+			$(selector).stop(stopAll,goToEnd);
+
+				可选的 stopAll 参数规定是否应该清除动画队列。默认是 false，即仅停止活动的动画，允许任何排入队列的动画向后执行。
+
+				可选的 goToEnd 参数规定是否立即完成当前动画。默认是 false。
+
+				因此，默认地，stop() 会清除在被选元素上指定的当前动画。
+
+	Callback 方法
+
+		Callback 函数等待当前动画全部完成之后执行。
+
+		使用 callback 实例
+
+			$("button").click(function(){
+			  $("p").hide("slow",function(){
+			    alert("段落现在被隐藏了");
+			  });
+			});
+
+			使用一个匿名函数吧alert包起来实现callback
+
+JQuery Dom 操作
+	
+	获得(设置)内容 - text()、html() 以及 val()
+
+		三个简单实用的用于 DOM 操作的 jQuery 方法：
+
+		    text() - 设置或返回所选元素的文本内容
+		    html() - 设置或返回所选元素的内容（包括 HTML 标记）
+		    val() - 设置或返回表单字段的值
+
+				$("#btn1").click(function(){
+				  alert("Text: " + $("#test").text());
+				});
+
+				//改变属性
+				$("#btn1").click(function(){
+				  alert("Text: " + $("#test").text("Hello world!"));
+				});
+				$("#btn2").click(function(){
+				  alert("HTML: " + $("#test").html());
+				});
+			
+		text()、html() 以及 val() 的回调函数
+
+			text()、html() 以及 val()，attr() 拥有回调函数。
+			回调函数有两个参数：被选元素列表中当前元素的下标，以及获取到的值（原始）。
+
+				$("#btn1").click(function(){
+				    $("#test1").text(function(i,origText){
+				        return "旧文本: " + origText + " 新文本: Hello world! (index: " + i + ")"; 
+				    });
+				});
+				 
+	获取(改变)属性 - attr()
+
+		jQuery attr() 方法用于获取属性值。
+
+			$("button").click(function(){
+			  alert($("#runoob").attr("href"));
+			});
+
+			//改变属性
+			$("button").click(function(){
+			  alert($("#runoob").attr("href","http://www.runoob.com/jquery");
+			});
+
+	jQuery - 添加元素
+
+		添加新内容的四个 jQuery 方法   -append()  prepend()  after()  before()
+
+		    append() - 在被选元素的结尾插入内容
+
+		    prepend() - 在被选元素的开头插入内容
+
+				$("p").append("追加文本");
+
+				$("p").prepend("在开头追加文本");
+
+		    after() - 在被选元素之后插入内容
+
+		    before() - 在被选元素之前插入内容
+
+				$("img").after("在后面添加文本");
+				 
+				$("img").before("在前面添加文本");
+		    	
+	JQuery - 删除元素
+
+		删除元素和内容  remove()  empty()
+
+    		remove() - 删除被选元素（及其子元素）
+
+    		empty() - 从被选元素中删除子元素
+
+				$("#div1").remove();
+
+				$("#div1").empty();
+
+		过滤被删除的元素
+
+			删除 class="italic" 的所有 <p> 元素：
+
+				$("p").remove(".italic");
+
+	jQuery - 操作 CSS 类
+
+		jQuery addClass() 方法
+
+			$("button").click(function(){
+			  $("h1,h2,p").addClass("blue");
+			  $("div").addClass("important");
+			});
+
+		jQuery removeClass() 方法
+
+			$("button").click(function(){
+			  $("h1,h2,p").removeClass("blue");
+			});
+
+		jQuery toggleClass() 方法
+
+			该方法对被选元素进行添加/删除类的切换操作：(有变无，无变有)
+
+				$("button").click(function(){
+				  $("h1,h2,p").toggleClass("blue");
+				});
+
+	jQuery css() 方法
+
+		css() 方法设置或返回被选元素的一个或多个样式属性。
+
+		返回 CSS 属性	
+
+			$("p").css("background-color");
+
+		设置 CSS 属性
+
+			$("p").css("background-color","yellow");	
+			
+			$("p").css({"background-color":"yellow","font-size":"200%"});
+
+	jQuery 尺寸方法
+
+		jQuery 提供多个处理尺寸的重要方法：
+    	
+    	width()    height()    innerWidth()    innerHeight()    outerWidth()    outerHeight()
+
+    	jQuery width() 和 height() 方法
+
+    		width() 方法设置或返回元素的宽度（不包括内边距、边框或外边距）。
+
+			height() 方法设置或返回元素的高度（不包括内边距、边框或外边距）。
+
+				$("button").click(function(){
+				  var txt="";
+				  txt+="div 的宽度是: " + $("#div1").width() + "</br>";
+				  txt+="div 的高度是: " + $("#div1").height();
+				  $("#div1").html(txt);
+				});
+				
+		jQuery innerWidth() 和 innerHeight() 方法
+
+			innerWidth() 方法返回元素的宽度（包括内边距）。
+
+			innerHeight() 方法返回元素的高度（包括内边距）。
+
+				$("button").click(function(){
+				  var txt="";
+				  txt+="div 宽度，包含内边距: " + $("#div1").innerWidth() + "</br>";
+				    txt+="div 高度，包含内边距: " + $("#div1").innerHeight();
+				  $("#div1").html(txt);
+				});
+
+		jQuery outerWidth() 和 outerHeight() 方法
+
+			outerWidth() 方法返回元素的宽度（包括内边距和边框）。
+
+			outerHeight() 方法返回元素的高度（包括内边距和边框）。
+
+				
+				$("button").click(function(){
+				  var txt="";
+				  txt+="div 宽度，包含内边距和边框: " + $("#div1").outerWidth() + "</br>";
+				  txt+="div 高度，包含内边距和边框: " + $("#div1").outerHeight();
+				  $("#div1").html(txt);
+				});
+				
+
+JQuery Ajax
+
+	jQuery - AJAX load() 方法
+		
+		语法:
+			
+			$(selector).load(URL,data,callback);
+
+				必需的 URL 参数规定您希望加载的 URL。
+
+				可选的 data 参数规定与请求一同发送的查询字符串键/值对集合。
+
+				可选的 callback 参数是 load() 方法完成后所执行的函数名称。
+
+			实例
+
+				$("#div1").load("demo_test.txt");
+
+			也可以把 jQuery 选择器添加到 URL 参数。
+
+			下面的例子只把 "demo_test.txt" 文件中 id="p1" 的元素的内容，加载到指定的 <div> 元素中：
+
+			实例
+
+				$("#div1").load("demo_test.txt #p1");
+
+		可选的 callback 参数规定当 load() 方法完成后所要允许的回调函数。回调函数可以设置不同的参数：
+
+		    responseTxt - 包含调用成功时的结果内容
+		    statusTXT - 包含调用的状态
+		    xhr - 包含 XMLHttpRequest 对象
+
+		下面的例子会在 load() 方法完成后显示一个提示框。
+		如果 load() 方法已成功，则显示"外部内容加载成功！"，而如果失败，则显示错误消息：
+
+		实例
+
+			$("button").click(function(){
+			  $("#div1").load("demo_test.txt",function(responseTxt,statusTxt,xhr){
+			    if(statusTxt=="success")
+			      alert("外部内容加载成功!");
+			    if(statusTxt=="error")
+			      alert("Error: "+xhr.status+": "+xhr.statusText);
+			  });
+			});
+
+	jQuery $.get() 方法
+
+		$.get() 方法通过 HTTP GET 请求从服务器上请求数据。
+
+		语法：
+
+		$.get(URL,callback);
+
+		下面的例子使用 $.get() 方法从服务器上的一个文件中取回数据：
+
+		实例
+
+			$("button").click(function(){
+			  $.get("demo_test.php",function(data,status){
+			    alert("数据: " + data + "\n状态: " + status);
+			  });
+			});
+
+		$.get() 的第一个参数是我们希望请求的 URL（"demo_test.php"）。
+
+		第二个参数是回调函数。第一个回调参数存有被请求页面的内容，第二个回调参数存有请求的状态。
+
+	jQuery $.post() 方法
+
+		$.post() 方法通过 HTTP POST 请求从服务器上请求数据。
+
+		语法:
+
+		$.post(URL,data,callback);
+
+		下面的例子使用 $.post() 连同请求一起发送数据：
+
+		实例
+
+			$("button").click(function(){
+			    $.post("/try/ajax/demo_test_post.php",
+			    {
+			        name:"菜鸟教程",
+			        url:"http://www.runoob.com"
+			    },
+			        function(data,status){
+			        alert("数据: \n" + data + "\n状态: " + status);
+			    });
+			});
+
+		$.post() 的第一个参数是我们希望请求的 URL ("demo_test_post.php")。
+
+		然后我们连同请求（name 和 url）一起发送数据。
+
+		"demo_test_post.php" 中的 PHP 脚本读取这些参数，对它们进行处理，然后返回结果。
+
+		第三个参数是回调函数。第一个回调参数存有被请求页面的内容，而第二个参数存有请求的状态。
+
+			
+
+    			
+
+
+
+
+

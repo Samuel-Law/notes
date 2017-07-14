@@ -1,0 +1,75 @@
+用express调试本地网站
+
+创建express项目，打开命令行界面并切换到本项目源代码目录
+运行命令 express demo
+(既创建一个名为demo的文件夹，里面包含express项目，可自行手动创建)
+
+打开命令行界面并切换到本项目源代码目录，运行命令 npm install
+(安装express，需要先配置package.json文件)
+
+然后启动服务：	npm start
+
+
+配置Nginx，增加一个「server」：
+
+```
+server {
+	listen 80;
+	server_name www-local.ibeiliao.com;
+	location / {
+		proxy_pass http://127.0.0.1:6002;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+	}
+	location ~* \.html$ {
+		proxy_pass http://118.178.168.16;
+		proxy_set_header Host 'ibeiliao.com';
+		proxy_set_header X-NginX-Proxy true;
+	}
+	location = /index.html {
+		rewrite /index.html / permanent;
+	}
+}
+```
+
+编辑「hosts」，增加一条记录
+(hosts文件一般放在 C:\Windows\System32\drivers\etc\hosts)
+(win7以下没哟权限直接修改，可把文件拉出来改完在放进去)
+
+```
+127.0.0.1 	www-local.ibeiliao.com
+```
+
+打开浏览器访问「www-local.ibeiliao.com」即可预览本项目页面。
+
+
+## 各环境对应域名
+
+- 本地环境: www-local.ibeiliao.com
+- 开发环境: www-dev.ibeiliao.com
+- 测试环境: www-test.ibeiliao.com
+- 预发布环境: www-pre.ibeiliao.com
+- 生产环境: ibeiliao.com
+
+
+## 项目发布
+
+安装构建工具：
+
+```
+npm install back2front-cli -g
+```
+
+切换到本项目目录下，执行命令：
+
+```
+back2front build . --env <env>
+```
+
+不同环境对应的「env」参数值分别为：
+
+- 测试环境：test
+- 预发布环境：pre
+- 生产环境：prod
+
+提交代码到SVN库后，到瓦力平台执行相应的发布任务。

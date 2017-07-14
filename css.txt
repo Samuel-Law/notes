@@ -1,0 +1,118 @@
+css
+·三种div绝对定位居中方法
+	1.
+		div{
+			position: absolute;
+			left: 50;/*(top: 50%)*/
+			margin-left: -300px; /*宽度的一半*/
+		}
+	2.
+		div{
+			position: absolute;
+			left: 50;/*(top: 50%)*/
+			transform: translate(-50%,-50%);
+		}
+	3.
+		div{
+			position: absolute;
+			left: 0;right: 0;top: 0;bottom: 0;
+			margin: auto;
+		}
+·不规则图形
+	1.圆形
+		#circle {
+   			width: 120px;
+    		height: 120px;
+   			background: #7fee1d;
+   			-moz-border-radius: 60px;
+   			-webkit-border-radius: 60px;
+   			border-radius: 60px;
+   		}
+   	2.三角形
+   		#triangle {
+		    width: 0;
+		    height: 0;
+		    border-bottom: 140px solid #fcf921;
+		    border-left: 70px solid transparent;
+		    border-right: 70px solid transparent;
+		}   
+	3.梯形
+		#trapezium {
+		    height: 0;
+		    width: 120px;
+		    border-bottom: 120px solid #ec3504;
+		    border-left: 60px solid transparent;
+		    border-right: 60px solid transparent;
+		} 
+	4.消息提示框
+		#comment_bubble {
+		    width: 140px;
+		    height: 100px;
+		    background: #088cb7;
+		    position: relative;
+		    -moz-border-radius: 12px;
+		    -webkit-border-radius: 12px;
+		    border-radius: 12px;
+		}
+		#comment_bubble:before {
+		    content: "";
+		    width: 0;
+		    height: 0;
+		    right: 100%;
+		    top: 38px;
+		    position: absolute;
+		    border-top: 13px solid transparent;
+		    border-right: 26px solid #088cb7;
+		    border-bottom: 13px solid transparent;
+		}                    			
+	5.星形
+		#star {
+		    width: 0;
+		    height: 0;
+		    margin: 50px 0;
+		    color: #fc2e5a;
+		    position: relative;
+		    display: block;
+		    border-right: 100px solid transparent;
+		    border-bottom: 70px solid #fc2e5a;
+		    border-left: 100px solid transparent;
+		    -moz-transform: rotate(35deg);
+		    -webkit-transform: rotate(35deg);
+		    -ms-transform: rotate(35deg);
+		    -o-transform: rotate(35deg);
+		}
+		  
+		#star:before {
+		    height: 0;
+		    width: 0;
+		    position: absolute;
+		    display: block;
+		    top: -45px;
+		    left: -65px;
+		    border-bottom: 80px solid #fc2e5a;
+		    border-left: 30px solid transparent;
+		    border-right: 30px solid transparent;
+		    content: '';
+		    -webkit-transform: rotate(-35deg);
+		    -moz-transform: rotate(-35deg);
+		    -ms-transform: rotate(-35deg);
+		    -o-transform: rotate(-35deg);
+		}
+		  
+		#star:after {
+		    content: '';
+		    width: 0;
+		    height: 0;
+		    position: absolute;
+		    display: block;
+		    top: 3px;
+		    left: -105px;
+		    color: #fc2e5a;
+		    border-right: 100px solid transparent;
+		    border-bottom: 70px solid #fc2e5a;
+		    border-left: 100px solid transparent;
+		    -webkit-transform: rotate(-70deg);
+		    -moz-transform: rotate(-70deg);
+		    -ms-transform: rotate(-70deg);
+		    -o-transform: rotate(-70deg);
+		}    

@@ -1,0 +1,187 @@
+·XTemplate
+	安装
+			npm install xtpl xtemplate --save 
+		在views目录添加 test.xtpl 文件，其内容为
+			this is {{title}}!
+		集成到Express中，只需要在app.js中，设置模板引擎即可
+			var print = require('./routes/print'); //此行代码放入app.js的require声明代码段下边
+			app.set('view engine', 'xtpl'); //此行代码放入app.js的app.set代码段下边
+			app.use('/ooxx', print); //此行代码放入app.js的app.use代码段下边
+		测试一个路径
+			在 print.js （router/print.js）中,以下完整代码
+				var express = require('express');
+				var router = express.Router();
+				router.get('/', function(req, res) {
+				res.render('test', { title: 'Express' });
+				});
+				module.exports = router;
+		运行命令 node app.js
+
+	安装与调用
+		app.js文件加入
+			var xtpl = require('xtpl');
+			app.set('view engine', 'xtpl');
+			xtpl.__express = xtpl.renderFile;
+	
+	语法
+		
+		简单的变量
+			{{变量}}，比如{{name}}，数据是{"name":"xtemplate"}，
+			{{name}}会被替换成xtemplate。
+			如果数据中带有html标签呢？比如{"name":"<p>xtemplate</p>"}。
+			xtemplate会自动转译，输出的内容是 <p>xtemplate</p>。			/
+			如果希望不转译呢？
+			可以使用{{{name}}}，这样就可以渲染数据中的html格式。
+			如果name字段不存在，{{name}} 渲染成空字符。
+
+		变量支持使用运算符
+			比如：{{x+y}}，数据是{"x":1,"y":2}，渲染的结果会是3。
+			xtemplate还会自动转换变量类型为数值型，比如数据为 {"x":1,"y":"2"}，
+			渲染的结果依旧是3，不会是12。
+			xtemplate 支持最常用的 + - * / % 运算符。					/
+			当然直接 {{x+1}}也是可以的，但不支持{{x--}}或{{x++}}的形式。
+
+		注释
+			使用 {{! 我是神奇的注释}}
+		if
+			if 块状命令由 {{#if()}}、{{elseif()}}
+			不是必须，else与if中间不要加空格、{{else}}（不是必须，不要加 #）、{{/if}}组成。
+			运算符支持：===、!==、>、>=、<、<= 。
+			特别特别留意!!!判断相等使用===，不能使用== !!!
+
+		||、&&、!的使用
+			"并"的判断使用&&符号，“或”的判断使用||符号，“非”的判断使用!符号
+
+		数组遍历
+				<ul>
+				    {{#each(list)}}
+				        <li>{{this}}</li>
+				    {{/each}}
+				</ul>								////
+			数据：{list:["女装","男装","童装"]} 		
+
+			有时我们需要获取遍历当前的索引值，如何处理呢？
+				<ul>
+				    {{#each(list)}}
+				        <li>{{xindex}}.{{this}}</li>
+				    {{/each}}
+				</ul>					////
+
+			通过{{xindex}}可以获取索引值，从0开始。
+			this和xindex我们称之为xtemplate的关键字，数据Object字段定义时键名请避免使用。
+
+		遍历二维数据
+			菜单数据：
+				{list:[{"name":"女装","link":"http://xxx"},
+					   {"name":"男装","link":"http://xxx"},
+					   {"name":"童装","link":"http://xxx"}]}。
+			对应模板如下：
+				<ul>
+				    {{#each(list)}}
+				        <li><a href="{{link}}">{{name}}</a></li>
+				    {{/each}}
+				</ul>					////
+			无须使用{{this.name}} ，直接使用键名就可以获取字段数据。
+		
+		root 关键字
+			可以通过root关键字，获取数据根层（上面的demo中指list字段这一层）。
+				<ul>
+				    {{#each(list)}}
+				        <li><a href="{{link}}">{{name}}</a> {{root.title}}</li>
+				    {{/each}}
+		
+				</ul>				////
+		相对引用
+			<ul>
+			    {{#each(list)}}
+			        <li><a href="{{link}}">{{name}}</a> {{../title}}</li>
+			    {{/each}}
+			</ul>					////
+
+			可以使用  ../ 来获取上一层的数据。
+		
+		遍历对象
+			我们要遍历的数据，不是数组，而是对象，
+			数据：{"data":{"x":1,"y":2}}。
+				{{#with(data)}}
+				{{x}}+{{y}}={{x+y}}
+				{{/with}}
+
+		//高级语法
+		set() 设置变量
+			有时判断逻辑特别复杂，为了让代码更利于阅读，好的版本是提取设置变量。
+				{{#if(x===1&&y===2)}}
+				   {{#set(z=3)}}
+				{{/if}}
+				{{#if(z===3)}}
+				   等价于 x===1&&y===2
+				{{/if}}
+
+		macro() 宏的定义
+			有时我们模板中会多次出现一个结构，比如一个表单，每个input下面有个消息容器：
+				"     <div class =auth-msg">该字段必填</div>    "       
+			/多处定义不利于维护，我们希望提取这个div，如何处理呢？
+				{{#macro("msg","text")}}
+				    <div class="auth-msg">{{text}}</div>
+				{{/macro}}
+
+				<input type="text" name="name" value="">
+				{{macro("msg","名字不可以为空")}}
+					
+			留意macro命令比较特殊，第一个参数定义宏的名称，
+			这里我们命名为msg，调用时就是 {{macro("msg")}} 。
+			后面的参数都是自定义的传参，以逗号隔开。
+		
+		include() 引用子模板
+			x.xtpl 与 y.xtpl 同级目录，y.xtpl 引用子模板 x.tpl：
+				{{{include("x")}}}
+			一般用于header footer 
+			（特别留意：include语法需要三个 {} ！！！）
+
+		多个页面通用模板
+			先建首页路由
+				app.get('/index',function(req, res){
+				    res.render('index',{title:'xtemplate',content:'this is demo'});
+				});
+			在首页 index.xtpl使用通用模板
+				
+				{{extend ("./layout.xtpl")}}
+				{{#block ("head")}}
+				    <style>
+				        p{
+				            line-height: 24px;
+				        }
+				    </style>
+				{{/block}}
+
+				{{#block ("body")}}
+				    <p>这是正文</p>
+				{{/block}}
+			使用extend 语法，让index模板继承个layout模板，这样就拥有这个layout的模板内容。
+			（留意：这里的block语法不需要三个 {}！！！）
+
+			定义 layout.xtpl设置通用模板
+				<!DOCTYPE html>
+
+				<html>
+ 
+				<head>
+				    {{{block ("head")}}}
+				</head>
+				<body>
+				    {{{block ("body")}}}
+				</body>
+				</html>
+			/（必须留意：这里的block语法需要三个 {} ! ! ! )
+
+
+			
+
+
+			
+
+
+
+
+
+

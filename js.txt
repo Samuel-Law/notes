@@ -1,0 +1,92 @@
+js
+·要点
+	1.sort排序
+		Javascript 的sort()函数在默认情况下使用字母数字（字符串Unicode码点）排序。
+		所以[1,2,5,10].sort() 会输出 [1, 10, 2, 5].
+		要正确的排序一个数组, 可以用 [1,2,5,10].sort((a, b) => a — b)
+	2.new Date() 
+		new Date() 可以接受：
+			·没有参数： 返回当前时间
+			·一个参数 x： 返回1970年1月1日 + x 毫秒。 了解 Unix 的人知道为什么。
+			·new Date(1, 1, 1) 返回 1901, 二月 , 1号。因为，第一个参数表示1900年加1年，第二个参数表示这一年的第二个月（因此是二月） ，第三个参数很明显是这个月的第一天，
+			·new Date(2016, 1, 1) 不会给1900年加上2016。它仅代表2016年。
+	3.replace
+		replace不代表 替代
+			let s = "bob"
+			const replaced = s.replace('b', 'l')
+			replaced === "lob"
+			s === "bob"
+
+			replace不会改变它们的输入。 replace 只会替换第一个匹配的字符串:
+			如果你想替换所有匹配的字符串，你可以使用带/g标志的正则表达式 :
+			"bob".replace(/b/g, 'l') === 'lol' // 替换所有匹配的字符串
+	4.比较===
+			// These are ok
+		'abc' === 'abc' 	// true
+		1 === 1         	// true
+		// These are not
+		[1,2,3] === [1,2,3] // false
+		{a: 1} === {a: 1}   // false
+		{} === {}           // false
+		原因：[1,2,3]和[1,2,3]是两个独立的数组。它们只是恰好包含相同的值。它们具有不同的引用，无法用===相比较。
+	5.数组不是原始数据类型
+		typeof {} === 'object'  // true
+		typeof 'a' === 'string' // true
+		typeof 1 === number     // true
+		// But....
+		typeof [] === 'object'  // true
+		如果你想知道你的变量是不是数组，你仍然可以用Array.isArray(myVar)
+	6.闭包
+		const Greeters = []
+		for (var i = 0; i < 10; i++) {
+		    Greeters.push(function () {
+		        return console.log(i)
+		    })
+		}
+		Greeters[0]() // 10
+		Greeters[1]() // 10
+		Greeters[2]() // 10
+
+		输出不是 1，2，3 而是 10 10 10
+
+
+·笔试题
+	1.最快输出10000个任意字符
+		function repeatChar(char, num) {
+		    if (num === 1) {
+		        return char;
+		    } else {
+		        var temp = repeatChar(char, parseInt(num / 2));
+		        if (num % 2) {
+		            return temp + temp + char;
+		        } else {
+		            return temp + temp;
+		        }
+		    }
+		}
+	2.正则表达式更换字符串
+		var str = "my name is {$name} .I like  {$hobby}";
+		var obj = {name:'Tom', hobby:'codding'}; 
+		str=str.replace(/\{[$](.*?)\}/g, function ($0,$1){return obj[$1];}); 
+		alert(str);    
+	3.点击li标签输出当前li标签序号
+		var items = document.getElementsByTagName('li');  
+	    for (var i=0;i<items.length;i++){  
+	        (function(i){if(document.addEventListener){
+			items[i].addEventListener('click',function(){console.log("("+(i+1)+")");},false);
+		} else if(document.attachEvent){
+			items[i].attachEvent('onclick',function(){console.log("("+(i+1)+")")});
+		}})(i);  
+	   	}
+	 4.输出当前日期
+	 	var myDate = new Date();
+		var a=myDate.getFullYear();
+		var b=myDate.getMonth()+1;
+		function myNewDate(a,b){
+			if (b<10) {b="0"+b}
+			var date=a+"-"+b	
+			return date;	
+		}
+		console.log(myNewDate(a,b));
+
+	 	
